@@ -1,8 +1,13 @@
-import Queue
+import sys
+
+if sys.version_info[0] == 2:
+    from Queue import Queue
+else:
+    from queue import Queue
 
 def bfs(graph, start, end):
     """Breadth-first search
-    
+
     inspired by - http://stackoverflow.com/a/16747264/947305
 
     Args:
@@ -52,7 +57,7 @@ def bfs(graph, start, end):
         else:
             return path[-1] == end
 
-    q = Queue.Queue()
+    q = Queue()
     path = [start]
     q.put(path)
     visited = set([start])
