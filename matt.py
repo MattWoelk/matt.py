@@ -5,6 +5,18 @@ if sys.version_info[0] == 2:
 else:
     from queue import Queue
 
+def _get_connected_nodes(graph, node):
+    if hasattr(graph, '__call__'):
+        return graph(node)
+    else:
+        return graph[node]
+
+def _is_at_end(end, path):
+    if hasattr(end, '__call__'):
+        return end(path)
+    else:
+        return path[-1] == end
+
 def bfs(graph, start, end):
     """Breadth-first search
 
@@ -45,18 +57,6 @@ def bfs(graph, start, end):
     True
     """
 
-    def get_connected_nodes(graph, node):
-        if hasattr(graph, '__call__'):
-            return graph(node)
-        else:
-            return graph[node]
-
-    def is_at_end(end, path):
-        if hasattr(end, '__call__'):
-            return end(path)
-        else:
-            return path[-1] == end
-
     q = Queue()
     path = [start]
     q.put(path)
@@ -65,9 +65,9 @@ def bfs(graph, start, end):
     while not q.empty():
         path = q.get()
         last_node = path[-1]
-        if is_at_end(end, path):
+        if _is_at_end(end, path):
             return path
-        for node in get_connected_nodes(graph, last_node):
+        for node in _get_connected_nodes(graph, last_node):
             if node not in visited:
                 visited.add(node)
                 q.put(path + [node])
