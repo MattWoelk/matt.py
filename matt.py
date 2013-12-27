@@ -1,9 +1,6 @@
 import sys
 
-if sys.version_info[0] == 2:
-    from Queue import Queue
-else:
-    from queue import Queue
+from collections import deque
 
 def _get_connected_nodes(graph, node):
     if hasattr(graph, '__call__'):
@@ -57,20 +54,20 @@ def bfs(graph, start, end):
     True
     """
 
-    q = Queue()
+    q = deque()
     path = [start]
-    q.put(path)
+    q.append(path)
     visited = set([start])
 
-    while not q.empty():
-        path = q.get()
+    while not len(q) == 0:
+        path = q.popleft()
         last_node = path[-1]
         if _is_at_end(end, path):
             return path
         for node in _get_connected_nodes(graph, last_node):
             if node not in visited:
                 visited.add(node)
-                q.put(path + [node])
+                q.append(path + [node])
     return None
 
 if __name__ == "__main__":
