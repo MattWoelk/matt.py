@@ -1,5 +1,3 @@
-import sys
-
 from collections import deque
 
 def _get_connected_nodes(graph, node):
